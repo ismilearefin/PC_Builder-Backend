@@ -32,6 +32,7 @@ async function run() {
     });
 
     const productCollection = client.db("PcBuilder").collection("products");
+    const pcBuilderProductCollection = client.db("PcBuilder").collection("pcBuilderProducts");
 
     app.get("/products", async (req, res) => {
       try {
@@ -65,6 +66,29 @@ async function run() {
         res.status(500).send({ error: "Internal server error" });
       }
     });
+
+    app.get('/pcBuilder',async (req, res) => {
+      
+      const result =  pcBuilderProductCollection.find({});
+      const data =await result.toArray();
+
+      res.send({
+        message: 'Success',
+        data: data
+      })
+    })
+    app.post('/pcBuilder',async (req, res) => {
+      const data = req.body;
+      const result = await pcBuilderProductCollection.insertOne(data);
+
+      res.send({
+        message: 'Success',
+        data: result
+      })
+    })
+
+
+
   } finally {
   }
 }
