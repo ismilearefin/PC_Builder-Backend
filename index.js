@@ -50,6 +50,24 @@ async function run() {
       }
     });
 
+    app.get('/pcBuilder',async (req, res) => {
+      try{
+      const result =  pcBuilderProductCollection.find({});
+      const data =await result.toArray();
+      if (result) {
+        res.send({
+          message: 'Success',
+          data: data
+        })
+      } else {
+        res.status(404).send({ error: "Product not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: "Internal server error" });
+    }
+    })
+
     app.get("/products/:id", async (req, res) => {
       try {
         const id = req.params.id;
@@ -67,24 +85,25 @@ async function run() {
       }
     });
 
-    app.get('/pcBuilder',async (req, res) => {
-      
-      const result =  pcBuilderProductCollection.find({});
-      const data =await result.toArray();
+   
 
-      res.send({
-        message: 'Success',
-        data: data
-      })
-    })
     app.post('/pcBuilder',async (req, res) => {
+      try{
       const data = req.body;
       const result = await pcBuilderProductCollection.insertOne(data);
 
-      res.send({
-        message: 'Success',
-        data: result
-      })
+      if (result) {
+        res.send({
+          message: 'Success',
+          data: result
+        })
+      } else {
+        res.status(404).send({ error: "Product not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: "Internal server error" });
+    }
     })
 
 
